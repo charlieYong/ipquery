@@ -34,13 +34,17 @@ int load_ip_data_file(const char* datafile) {
         abort();
     }
     struct stat st;
-    if (fstat(fd, &st) < 0)
+    if (fstat(fd, &st) < 0) {
+        close(fd);
         return -1;
+    }
     memset(&ipdata, 0, sizeof(ipdata));
     memset(result, 0, MAX_IP_INFO_LEN);
     void* addr = mmap(NULL, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
-    if (MAP_FAILED == addr)
+    if (MAP_FAILED == addr) {
+        close(fd);
         return -1;
+    }
     ipdata.data = (unsigned char*)addr;
     ipdata.size = st.st_size;
     ipdata.indexstart = ((uint32_t*)addr)[0];
@@ -110,10 +114,10 @@ static char* get_ip_info(uint32_t offset) {
 
 char* query(const char* ip) {
     if (NULL == ip || NULL == ipdata.data)
-        return "";
+        return NULL;
     uint32_t iplong = ip2long(ip);
     if (0 == iplong)
-        return "";
+        return NULL;
     memset(result, 0, MAX_IP_INFO_LEN);
     uint32_t offset, brk, low, mid, high, indexip, endip;
     low = 0;
@@ -132,5 +136,5 @@ char* query(const char* ip) {
             low = mid + 1;
         }
     }
-    return "";
+    return NULL;
 }
