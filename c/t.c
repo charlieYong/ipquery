@@ -1,15 +1,22 @@
 #include <stdio.h>
+#include <string.h>
+#include <errno.h>
 #include "ip.h"
 
 int main(int argc, char** argv) {
+    if (2 > argc) {
+        printf("%s ip [ip2 ip3 ..]\n", argv[0]);
+        return -1;
+    }
     char* datafile = "/Users/charlie/code/github/ipquery/data/qqwry.dat";
     if (load_ip_data_file(datafile)) {
         printf("error\n");
         return -1;
     }
-
-    char* ip = "119.254.241.68";
-    printf("%s:%s\n", ip, query(ip));
+    int i = 1;
+    for (; i<argc; i++) {
+        printf("%s -> %s\n", argv[i], query(argv[i]));
+    }
     release();
     return 0;
 }

@@ -9,7 +9,6 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <arpa/inet.h>
-#include <iconv.h>
 
 #include "ip.h"
 
