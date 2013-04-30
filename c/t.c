@@ -8,7 +8,7 @@ int main(int argc, char** argv) {
         printf("%s ip [ip2 ip3 ..]\n", argv[0]);
         return -1;
     }
-    char* datafile = "/Users/charlie/code/github/ipquery/data/qqwry.dat";
+    char* datafile = "../data/qqwry.dat";
     if (load_ip_data_file(datafile)) {
         printf("error\n");
         return -1;

@@ -27,7 +27,7 @@ typedef struct _ipdata {
 static _ipdata ipdata;
 static unsigned char result[MAX_IP_INFO_LEN];
 
-int load_ip_data_file(char* datafile) {
+int load_ip_data_file(const char* datafile) {
     int fd = open(datafile, O_RDONLY);
     if (-1 == fd) {
         fprintf(stderr, "IpQuery open file failed:%s\n", strerror(errno));
@@ -57,7 +57,7 @@ void release(void) {
     }
 }
 
-uint32_t ip2long(char* ip) {
+uint32_t ip2long(const char* ip) {
     struct in_addr addr;
     if (inet_aton(ip, &addr) <= 0)
         return 0;
@@ -108,7 +108,7 @@ static char* get_ip_info(uint32_t offset) {
     return result;
 }
 
-char* query(char* ip) {
+char* query(const char* ip) {
     if (NULL == ip || NULL == ipdata.data)
         return "";
     uint32_t iplong = ip2long(ip);
