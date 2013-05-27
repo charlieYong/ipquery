@@ -9,6 +9,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <arpa/inet.h>
+#include <iconv.h>
 
 #include "ip.h"
 
@@ -22,10 +23,20 @@ typedef struct _ipdata {
     uint32_t total_index_num;
     unsigned char* data;
     size_t size;
+    iconv_t icv;
 } _ipdata;
 
 static _ipdata ipdata;
-static unsigned char result[MAX_IP_INFO_LEN];
+static char result[MAX_IP_INFO_LEN];
+static char utf8result[MAX_IP_INFO_LEN];
+
+static size_t gbk2utf8(iconv_t icv, char* inbuf, char* outbuf) {
+    if (NULL == inbuf || NULL == outbuf)
+        return -1;
+    size_t inlen = strlen(inbuf);
+    size_t outlen = MAX_IP_INFO_LEN - 1;
+    return iconv(icv, &inbuf, &inlen, &outbuf, &outlen);
+}
 
 int load_ip_data_file(const char* datafile) {
     int fd = open(datafile, O_RDONLY);
@@ -40,6 +51,7 @@ int load_ip_data_file(const char* datafile) {
     }
     memset(&ipdata, 0, sizeof(ipdata));
     memset(result, 0, MAX_IP_INFO_LEN);
+    memset(utf8result, 0, MAX_IP_INFO_LEN);
     void* addr = mmap(NULL, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
     if (MAP_FAILED == addr) {
         close(fd);
@@ -50,6 +62,7 @@ int load_ip_data_file(const char* datafile) {
     ipdata.indexstart = ((uint32_t*)addr)[0];
     ipdata.indexend = ((uint32_t*)addr)[1];
     ipdata.total_index_num = (ipdata.indexend - ipdata.indexstart) / INDEX_SIZE;
+    ipdata.icv = iconv_open("utf-8", "gbk");
     close(fd);
     return 0;
 }
@@ -58,6 +71,10 @@ void release(void) {
     if (NULL != ipdata.data) {
         munmap((void*)ipdata.data, ipdata.size);
         ipdata.data = NULL;
+    }
+    if (ipdata.icv > (iconv_t)0) {
+        iconv_close(ipdata.icv);
+        ipdata.icv = (iconv_t)-1;
     }
 }
 
@@ -109,7 +126,9 @@ static char* get_ip_info(uint32_t offset) {
     len = get_single_location(data_offset, result, MAX_IP_INFO_LEN, &next_offset);
     result[len++] = ' ';
     len += get_single_location(next_offset, result+len, MAX_IP_INFO_LEN-len, &next_offset);
-    return result;
+    gbk2utf8(ipdata.icv, result, utf8result);
+    //return result;
+    return utf8result;
 }
 
 char* query(const char* ip) {
@@ -119,6 +138,7 @@ char* query(const char* ip) {
     if (0 == iplong)
         return NULL;
     memset(result, 0, MAX_IP_INFO_LEN);
+    memset(utf8result, 0, MAX_IP_INFO_LEN);
     uint32_t offset, brk, low, mid, high, indexip, endip;
     low = 0;
     high = ipdata.total_index_num - 1;
