@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/mman.h>
-#include "ip.h"
+#include "src/ip.h"
 
 void check(char* ip) {
     printf("check: %s -> %s\n", ip, query((const char*)ip));
@@ -42,7 +42,7 @@ void check_all_ip(char* file) {
 }
 
 int main(int argc, char** argv) {
-    char* datafile = "../data/qqwry.dat";
+    char* datafile = "data/qqwry.dat";
     load_ip_data_file(datafile);
     check_all_ip(datafile);
     release();
