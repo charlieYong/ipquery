@@ -18,13 +18,14 @@ ipquery
 性能
 =======
 机器：4核CPU，4G内存的虚拟机，4个nginx work进程
+    
     Server Software:        ngx_openresty/1.2.7.8
     Server Hostname:        192.168.2.96
     Server Port:            8080
-
+    
     Document Path:          /ip?ip=119.254.241.70
     Document Length:        26 bytes
-
+    
     Concurrency Level:      1000
     Time taken for tests:   12.781 seconds
     Complete requests:      100000
