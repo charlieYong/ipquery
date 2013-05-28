@@ -17,7 +17,7 @@ ipquery
 
 性能
 =======
-机器：4核CPU，4G内存的虚拟机，4个nginx work进程
+机器：4核CPU，4G内存的虚拟机，4个nginx worker进程
     
     Server Software:        ngx_openresty/1.2.7.8
     Server Hostname:        192.168.2.96
