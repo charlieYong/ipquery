@@ -4,7 +4,7 @@ ipquery
 
 原理
 =======
-使用lua的c api编写ip查询逻辑作为lua的扩展库，直接在nginx中直接lua代码，无需上游服务
+使用lua的c api编写ip查询逻辑作为lua的扩展库，直接在nginx中执行lua代码，无需上游服务
 
 使用
 =======
