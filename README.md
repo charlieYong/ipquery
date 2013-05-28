@@ -15,5 +15,34 @@ ipquery
 * 启动nginx
 * have funs
 
-great thanks to ngx\_lua and openresty projects
+性能
+=======
+机器：4核CPU，4G内存的虚拟机，4个nginx work进程
+    Server Software:        ngx_openresty/1.2.7.8
+    Server Hostname:        192.168.2.96
+    Server Port:            8080
 
+    Document Path:          /ip?ip=119.254.241.70
+    Document Length:        26 bytes
+
+    Concurrency Level:      1000
+    Time taken for tests:   12.781 seconds
+    Complete requests:      100000
+    Failed requests:        0
+    Write errors:           0
+    Total transferred:      17800712 bytes
+    HTML transferred:       2600104 bytes
+    Requests per second:    7824.03 [#/sec] (mean)
+    Time per request:       127.811 [ms] (mean)
+    Time per request:       0.128 [ms] (mean, across all concurrent requests)
+    Transfer rate:          1360.09 [Kbytes/sec] received
+
+    Connection Times (ms)
+    min  mean[+/-sd] median   max
+    Connect:        0   60 463.4      1    7020
+    Processing:     0    2   8.7      1     234
+    Waiting:        0    2   8.7      1     234
+    Total:          0   62 464.0      2    7213
+
+great thanks to ngx\_lua and openresty projects
+=======
