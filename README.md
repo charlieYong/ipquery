@@ -9,7 +9,7 @@ ipquery
 使用
 =======
 * 安装nginx和ngx\_lua模块（或者直接安装[openresty](http://openresty.org/)）
-* 编译ip查询模块的lua扩展：cd src; gcc -shared -fPIC -llua ip_lua_bingding.c ip.c -o ipquery.so
+* 编译ip查询模块的lua扩展：cd src; gcc -Wall -O2 -shared -fPIC -llua ip_lua_bingding.c ip.c -o ipquery.so
 * 复制ipquery.so到lualib目录
 * 按照conf/nginx.conf修改你的nginx配置文件
 * 启动nginx

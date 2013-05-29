@@ -86,9 +86,9 @@ uint32_t ip2long(const char* ip) {
 }
 
 static uint32_t get_data_offset(uint32_t offset) {
-    unsigned char buf[4] = {0};
-    memcpy(buf, ipdata.data+offset, 3);
-    return *(uint32_t*)buf;
+    uint32_t _offset = 0;
+    memcpy(&_offset, ipdata.data+offset, 3);
+    return _offset;
 }
 
 static uint32_t get_endip_by_offset(uint32_t offset) {
@@ -139,7 +139,7 @@ char* query(const char* ip) {
         return NULL;
     memset(result, 0, MAX_IP_INFO_LEN);
     memset(utf8result, 0, MAX_IP_INFO_LEN);
-    uint32_t offset, brk, low, mid, high, indexip, endip;
+    uint32_t offset, low, mid, high, indexip;
     low = 0;
     high = ipdata.total_index_num - 1;
     while (low <= high) {
