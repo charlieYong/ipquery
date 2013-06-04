@@ -4,6 +4,8 @@
 #include <sys/time.h>
 #include "src/ip.h"
 
+#define TIMES 5000
+
 long long ustime() {
     struct timeval tv;
     gettimeofday(&tv, NULL);
@@ -20,12 +22,16 @@ int main(int argc, char** argv) {
         printf("error\n");
         return -1;
     }
-    int i = 1;
-    long long start;
+    int i = 1, j = 0;
+    long long start, end;
     for (; i<argc; i++) {
-        start = ustime();
         printf("%s -> %s ", argv[i], query(argv[i]));
-        printf("time: %.6f seconds\n", (double)((ustime() - start) / 1000000));
+        start = ustime();
+        for (j=0; j < TIMES; j++) {
+            query(argv[i]);
+        }
+        end = ustime();
+        printf("(%d times in %.6f seconds, %.6f microseconds per query)\n", j, (float)(end-start)/1000000, (float)(end-start)/TIMES);
     }
     release();
     return 0;
